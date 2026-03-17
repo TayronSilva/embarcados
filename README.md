@@ -17,6 +17,6 @@ Esta é a versão 2.0 do projeto, substituindo o legado anterior.
 2. Adicione suas chaves RSA (`private.key` e `public.key`) na pasta `src/main/resources/keys/`.
 3. Inicie a aplicação via Maven (`./mvnw spring-boot:run`) ou pela sua IDE.
 
-## Segurança e Práticas Recomendadas
-- **Segredos não são versionados**. O `application.yaml` (contendo credenciais) e os arquivos dentro de `src/main/resources/keys/` estão inseridos no `.gitignore`.
-- Nunca commite chaves de produção ou senhas de banco de dados no GitHub.
+## Versão Anterior (Legacy)
+O código legado anterior a esta versão 2.0 pode ser encontrado no seguinte repositório:
+[TransVeiculos-Legacy](https://github.com/TayronSilva/TransVeiculos-Legacy)
