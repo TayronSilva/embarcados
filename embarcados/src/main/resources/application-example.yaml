@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: embarcados-api
+  data:
+    mongodb:
+      uri: mongodb+srv://<usuario>:<senha>@<host>/<banco>?retryWrites=true&w=majority
+
+security:
+  jwt:
+    public-key: classpath:keys/public.key
+    private-key: classpath:keys/private.key
