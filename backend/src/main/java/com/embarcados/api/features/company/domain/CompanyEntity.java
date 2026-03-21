@@ -17,7 +17,6 @@ public class CompanyEntity {
     private String document;
     private String password;
 
-
     public CompanyEntity() {
 
     }

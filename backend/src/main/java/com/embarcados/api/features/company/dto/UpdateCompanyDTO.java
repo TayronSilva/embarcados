@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 public class UpdateCompanyDTO {
     private String name;
     private String email;
-    private String password;
+    private String Document;
 }

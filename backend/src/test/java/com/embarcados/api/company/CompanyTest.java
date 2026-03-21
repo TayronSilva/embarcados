@@ -31,7 +31,7 @@ public class CompanyTest {
     private CompanyServiceImp companyService;
 
     @Test
-    void CreateCompanySucess() {
+    void shouldCreateCompanySuccessfully() {
         CreateCompanyDTO inputDto = new CreateCompanyDTO("Empresa X", "x@email.com", "123", "senha123");
         CompanyEntity entitySalva = new CompanyEntity("id-gerado", "Empresa X", "x@email.com", "123", "hash-senha");
 
@@ -48,8 +48,8 @@ public class CompanyTest {
 
     @Test
     void findAllCompaniesSucess() {
-        CompanyEntity company1 = new CompanyEntity("1", "Company A", "a@test.com","111","pass1");
-        CompanyEntity company2 = new CompanyEntity("2", "Company B", "b@test.com","222","pass2");
+        CompanyEntity company1 = new CompanyEntity("1", "Company A", "a@test.com", "111", "pass1");
+        CompanyEntity company2 = new CompanyEntity("2", "Company B", "b@test.com", "222", "pass2");
 
         List<CompanyEntity> companies = List.of(company1, company2);
 

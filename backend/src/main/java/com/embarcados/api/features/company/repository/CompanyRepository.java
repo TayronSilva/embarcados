@@ -7,5 +7,6 @@ import java.util.Optional;
 
 public interface CompanyRepository extends MongoRepository<CompanyEntity, String> {
     Optional<CompanyEntity> findById(String id);
+
     Optional<CompanyEntity> findByEmail(String email);
 }

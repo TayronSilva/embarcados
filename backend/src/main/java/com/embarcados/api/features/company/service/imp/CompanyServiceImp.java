@@ -47,17 +47,14 @@ public class CompanyServiceImp implements CompanyService {
 
     @Override
     public CompanyResponseDTO update(String id, UpdateCompanyDTO updateCompanyDTO) {
-        CompanyEntity existing = companyRepository.findById(id)
+        CompanyEntity company = companyRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Empresa não encontrada"));
 
-        existing.setName(updateCompanyDTO.getName());
-        existing.setEmail(updateCompanyDTO.getEmail());
+        company.setName(updateCompanyDTO.getName());
+        company.setEmail(updateCompanyDTO.getEmail());
+        company.setDocument(updateCompanyDTO.getDocument());
 
-        if (updateCompanyDTO.getPassword() != null && !updateCompanyDTO.getPassword().isBlank()) {
-            existing.setPassword(passwordEncoder.encode(updateCompanyDTO.getPassword()));
-        }
-
-        CompanyEntity saved = companyRepository.save(existing);
+        CompanyEntity saved = companyRepository.save(company);
         return toResponse(saved);
     }
 
