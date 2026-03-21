@@ -1,0 +1,16 @@
+# Java
+back/target/
+back/.mvn/
+back/*.class
+
+# Node
+node_modules/
+front/node_modules/
+bun.lockb
+
+# VSCode
+.vscode/
+
+# Env
+.env
+.env.local

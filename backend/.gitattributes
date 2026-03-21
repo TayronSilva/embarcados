@@ -1,0 +1,18 @@
+/mvnw text eol=lf
+*.cmd text eol=crlf
+
+# build
+target/
+
+# IntelliJ
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# secrets
+src/main/resources/keys/private.key
+src/main/resources/application.yaml
+
+# logs
+*.log
