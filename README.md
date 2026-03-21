@@ -19,7 +19,6 @@ Este é um monorepo gerenciado com **Bun Workspaces** que contém:
 - **SpringDoc OpenAPI** - Documentação da API (Swagger UI)
 - **Lombok** - Redução de boilerplate
 - **Spring Boot DevTools** - Hot reload em desenvolvimento
-- **Spring Boot Actuator** - Métricas e monitoramento
 
 ### Frontend
 - **React 19.2.4**
