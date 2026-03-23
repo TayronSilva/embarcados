@@ -19,17 +19,15 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/v1/company")
+@RequiredArgsConstructor
 @Tag(name = "Company", description = "API de gerencimento de Empresas")
 public class CompanyController {
 
     private final CompanyService companyService;
-
-    public CompanyController(CompanyService companyService) {
-        this.companyService = companyService;
-    }
 
     @Operation(summary = "Criar empresa", description = "Cria uma nova empresa no sistema")
     @PostMapping("create")
