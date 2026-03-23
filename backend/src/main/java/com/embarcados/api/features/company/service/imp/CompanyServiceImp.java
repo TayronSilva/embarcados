@@ -1,26 +1,25 @@
 package com.embarcados.api.features.company.service.imp;
 
+import java.util.List;
+
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
 import com.embarcados.api.features.company.domain.CompanyEntity;
 import com.embarcados.api.features.company.dto.CompanyResponseDTO;
 import com.embarcados.api.features.company.dto.CreateCompanyDTO;
 import com.embarcados.api.features.company.dto.UpdateCompanyDTO;
 import com.embarcados.api.features.company.repository.CompanyRepository;
 import com.embarcados.api.features.company.service.CompanyService;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
 
-import java.util.List;
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class CompanyServiceImp implements CompanyService {
 
     private final PasswordEncoder passwordEncoder;
     private final CompanyRepository companyRepository;
-
-    public CompanyServiceImp(CompanyRepository companyRepository, PasswordEncoder passwordEncoder) {
-        this.companyRepository = companyRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
 
     @Override
     public CompanyResponseDTO create(CreateCompanyDTO createCompanyDTO) {

@@ -1,5 +1,7 @@
 package com.embarcados.api.features.company.controller;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,15 +24,15 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/v1/company")
+@RequestMapping("/api/v1/companies")
 @RequiredArgsConstructor
-@Tag(name = "Company", description = "API de gerencimento de Empresas")
+@Tag(name = "Companies", description = "API de gerencimento de Empresas")
 public class CompanyController {
 
     private final CompanyService companyService;
 
     @Operation(summary = "Criar empresa", description = "Cria uma nova empresa no sistema")
-    @PostMapping("create")
+    @PostMapping()
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Empresa criada com sucesso"),
             @ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos"),
@@ -45,17 +47,30 @@ public class CompanyController {
                 .body(company);
     }
 
-    @GetMapping("/findAll")
-    public Iterable<CompanyResponseDTO> findAll() {
-        return companyService.findAll();
+    @Operation(summary = "Listar empresas", description = "Retorna todas as empresas cadastradas")
+    @GetMapping()
+    public ResponseEntity<List<CompanyResponseDTO>> findAll() {
+        List<CompanyResponseDTO> companies = companyService.findAll();
+
+        return ResponseEntity
+                .ok(companies);
     }
 
-    @PutMapping("/update/{id}")
-    public CompanyResponseDTO update(
+    @Operation(summary = "Atualizar empresa", description = "Atualiza os dados de uma empresa existente")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Empresa atualizada com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Empresa não encontrada"),
+            @ApiResponse(responseCode = "400", description = "Dados inválidos")
+    })
+    @PutMapping("{id}")
+    public ResponseEntity<CompanyResponseDTO> update(
             @PathVariable String id,
             @RequestBody UpdateCompanyDTO updateCompanyDTO) {
 
-        return companyService.update(id, updateCompanyDTO);
+        CompanyResponseDTO updatedCompany = companyService.update(id, updateCompanyDTO);
+
+        return ResponseEntity
+                .ok(updatedCompany);
     }
 
 }
