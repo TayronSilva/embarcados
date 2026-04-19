@@ -12,4 +12,6 @@ public class LoginRequestDTO {
     @NotBlank
     private String password;
 
+    @NotBlank
+    private String userType; // "company" or "driver"
 }

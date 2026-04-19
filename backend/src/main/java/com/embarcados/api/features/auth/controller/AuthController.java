@@ -24,7 +24,7 @@ public class AuthController {
     private final AuthService authService;
 
 
-    @Operation(summary = "Auth Empresa", description = "API de autenticação")
+    @Operation(summary = "Auth Empresa/Driver", description = "API de autenticação para empresas e motoristas")
     @PostMapping("/login")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Autenticação com sucesso"),
