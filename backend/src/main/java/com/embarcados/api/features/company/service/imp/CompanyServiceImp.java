@@ -9,6 +9,7 @@ import com.embarcados.api.features.company.domain.CompanyEntity;
 import com.embarcados.api.features.company.dto.CompanyResponseDTO;
 import com.embarcados.api.features.company.dto.CreateCompanyDTO;
 import com.embarcados.api.features.company.dto.UpdateCompanyDTO;
+import com.embarcados.api.features.company.exceptions.CompanyNotFoundException;
 import com.embarcados.api.features.company.repository.CompanyRepository;
 import com.embarcados.api.features.company.service.CompanyService;
 
@@ -47,7 +48,7 @@ public class CompanyServiceImp implements CompanyService {
     @Override
     public CompanyResponseDTO update(String id, UpdateCompanyDTO updateCompanyDTO) {
         CompanyEntity company = companyRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Empresa não encontrada"));
+                .orElseThrow(CompanyNotFoundException::new);
 
         company.setName(updateCompanyDTO.getName());
         company.setEmail(updateCompanyDTO.getEmail());

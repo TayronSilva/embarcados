@@ -4,6 +4,7 @@ import com.embarcados.api.features.driver.domain.DriverEntity;
 import com.embarcados.api.features.driver.dto.CreateDriverDTO;
 import com.embarcados.api.features.driver.dto.DriverResponseDTO;
 import com.embarcados.api.features.driver.dto.UpdateDriverDTO;
+import com.embarcados.api.features.driver.exceptions.DriverNotFoundException;
 import com.embarcados.api.features.driver.repository.DriverRepository;
 import com.embarcados.api.features.driver.service.DriverService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -46,7 +47,7 @@ public class DriverServiceImp implements DriverService {
     @Override
     public DriverResponseDTO update(String id, UpdateDriverDTO updateDriverDTO) {
         DriverEntity driver = driverRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Motorista não encontrado"));
+                .orElseThrow(DriverNotFoundException::new);
 
         driver.setName(updateDriverDTO.getName());
         driver.setEmail(updateDriverDTO.getEmail());

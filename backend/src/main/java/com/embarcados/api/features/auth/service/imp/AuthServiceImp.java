@@ -2,10 +2,12 @@ package com.embarcados.api.features.auth.service.imp;
 
 import com.embarcados.api.features.auth.dto.LoginRequestDTO;
 import com.embarcados.api.features.auth.dto.LoginResponseDTO;
+import com.embarcados.api.features.auth.exceptions.InvalidCredentialsException;
+import com.embarcados.api.features.auth.exceptions.InvalidUserTypeException;
 import com.embarcados.api.features.auth.service.AuthService;
-import com.embarcados.api.features.company.domain.CompanyEntity;
+import com.embarcados.api.features.company.exceptions.CompanyNotFoundException;
 import com.embarcados.api.features.company.repository.CompanyRepository;
-import com.embarcados.api.features.driver.domain.DriverEntity;
+import com.embarcados.api.features.driver.exceptions.DriverNotFoundException;
 import com.embarcados.api.features.driver.repository.DriverRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -33,16 +35,16 @@ public class AuthServiceImp implements AuthService {
         } else if ("driver".equals(userType)) {
             return loginDriver(loginRequestDTO);
         } else {
-            throw new RuntimeException("Invalid user type. Use 'company' or 'driver'");
+            throw new InvalidUserTypeException();
         }
     }
 
     private LoginResponseDTO loginCompany(LoginRequestDTO loginRequestDTO) {
         var company = companyRepository.findByEmail(loginRequestDTO.getEmail())
-                .orElseThrow(() -> new RuntimeException("Company not found"));
+                .orElseThrow(() -> new CompanyNotFoundException("Empresa não encontrada para o email informado"));
 
         if (!passwordEncoder.matches(loginRequestDTO.getPassword(), company.getPassword())) {
-            throw new RuntimeException("Invalid email or password");
+            throw new InvalidCredentialsException();
         }
 
         var now = Instant.now();
@@ -56,8 +58,7 @@ public class AuthServiceImp implements AuthService {
                 .build();
 
         var token = jwtEncoder.encode(
-                JwtEncoderParameters.from(claims)
-        ).getTokenValue();
+                JwtEncoderParameters.from(claims)).getTokenValue();
 
         var response = new LoginResponseDTO();
         response.setUserId(company.getId());
@@ -70,10 +71,10 @@ public class AuthServiceImp implements AuthService {
 
     private LoginResponseDTO loginDriver(LoginRequestDTO loginRequestDTO) {
         var driver = driverRepository.findByEmail(loginRequestDTO.getEmail())
-                .orElseThrow(() -> new RuntimeException("Driver not found"));
+                .orElseThrow(() -> new DriverNotFoundException("Motorista não encontrado para o email informado"));
 
         if (!passwordEncoder.matches(loginRequestDTO.getPassword(), driver.getPassword())) {
-            throw new RuntimeException("Invalid email or password");
+            throw new InvalidCredentialsException();
         }
 
         var now = Instant.now();
@@ -88,8 +89,7 @@ public class AuthServiceImp implements AuthService {
                 .build();
 
         var token = jwtEncoder.encode(
-                JwtEncoderParameters.from(claims)
-        ).getTokenValue();
+                JwtEncoderParameters.from(claims)).getTokenValue();
 
         var response = new LoginResponseDTO();
         response.setUserId(driver.getId());
