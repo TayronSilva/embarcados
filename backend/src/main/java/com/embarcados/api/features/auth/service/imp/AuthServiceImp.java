@@ -2,8 +2,9 @@ package com.embarcados.api.features.auth.service.imp;
 
 import com.embarcados.api.features.auth.dto.LoginRequestDTO;
 import com.embarcados.api.features.auth.dto.LoginResponseDTO;
+import com.embarcados.api.features.auth.dto.UserRoleDTO;
 import com.embarcados.api.features.auth.exceptions.InvalidCredentialsException;
-import com.embarcados.api.features.auth.exceptions.InvalidUserTypeException;
+import com.embarcados.api.features.auth.exceptions.InvalidUserRoleException;
 import com.embarcados.api.features.auth.service.AuthService;
 import com.embarcados.api.features.company.exceptions.CompanyNotFoundException;
 import com.embarcados.api.features.company.repository.CompanyRepository;
@@ -28,15 +29,16 @@ public class AuthServiceImp implements AuthService {
     private final JwtEncoder jwtEncoder;
 
     public LoginResponseDTO login(LoginRequestDTO loginRequestDTO) {
-        var userType = loginRequestDTO.getUserType();
+        UserRoleDTO userRole = loginRequestDTO.getUserRole();
 
-        if ("company".equals(userType)) {
-            return loginCompany(loginRequestDTO);
-        } else if ("driver".equals(userType)) {
-            return loginDriver(loginRequestDTO);
-        } else {
-            throw new InvalidUserTypeException();
+        if (userRole == null) {
+            throw new InvalidUserRoleException();
         }
+
+        return switch (userRole) {
+            case Company -> loginCompany(loginRequestDTO);
+            case Driver -> loginDriver(loginRequestDTO);
+        };
     }
 
     private LoginResponseDTO loginCompany(LoginRequestDTO loginRequestDTO) {
@@ -52,7 +54,7 @@ public class AuthServiceImp implements AuthService {
                 .issuer("embarcados-api")
                 .subject(company.getId())
                 .claim("email", company.getEmail())
-                .claim("userType", "company")
+                .claim("userRole", UserRoleDTO.Company)
                 .issuedAt(now)
                 .expiresAt(now.plusSeconds(3600))
                 .build();
@@ -63,7 +65,7 @@ public class AuthServiceImp implements AuthService {
         var response = new LoginResponseDTO();
         response.setUserId(company.getId());
         response.setEmail(company.getEmail());
-        response.setUserType("company");
+        response.setUserRole(UserRoleDTO.Company);
         response.setToken(token);
 
         return response;
@@ -82,7 +84,7 @@ public class AuthServiceImp implements AuthService {
                 .issuer("embarcados-api")
                 .subject(driver.getId())
                 .claim("email", driver.getEmail())
-                .claim("userType", "driver")
+                .claim("userRole", UserRoleDTO.Driver)
                 .claim("companyId", driver.getCompanyId())
                 .issuedAt(now)
                 .expiresAt(now.plusSeconds(3600))
@@ -94,7 +96,7 @@ public class AuthServiceImp implements AuthService {
         var response = new LoginResponseDTO();
         response.setUserId(driver.getId());
         response.setEmail(driver.getEmail());
-        response.setUserType("driver");
+        response.setUserRole(UserRoleDTO.Driver);
         response.setCompanyId(driver.getCompanyId());
         response.setToken(token);
 

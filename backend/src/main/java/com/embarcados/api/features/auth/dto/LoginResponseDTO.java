@@ -7,7 +7,7 @@ public class LoginResponseDTO {
 
     private String userId;
     private String email;
-    private String userType; // "company" or "driver"
+    private UserRoleDTO userRole;
     private String companyId; // only for drivers
     private String token;
 

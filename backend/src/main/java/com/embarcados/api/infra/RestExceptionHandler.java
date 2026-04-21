@@ -1,13 +1,17 @@
 package com.embarcados.api.infra;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.embarcados.api.features.auth.exceptions.InvalidCredentialsException;
-import com.embarcados.api.features.auth.exceptions.InvalidUserTypeException;
+import com.embarcados.api.features.auth.exceptions.InvalidUserRoleException;
 import com.embarcados.api.features.company.exceptions.CompanyNotFoundException;
 import com.embarcados.api.features.driver.exceptions.DriverNotFoundException;
 
@@ -32,10 +36,9 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
   }
 
-  @ExceptionHandler(InvalidUserTypeException.class)
-  private ResponseEntity<RestErrorMessage> invalidUserTypeHandler(InvalidUserTypeException exception) {
+  @ExceptionHandler(InvalidUserRoleException.class)
+  private ResponseEntity<RestErrorMessage> invalidUserRoleHandler(InvalidUserRoleException exception) {
     RestErrorMessage errorResponse = new RestErrorMessage(HttpStatus.BAD_REQUEST, exception.getMessage());
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
   }
-
 }
