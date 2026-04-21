@@ -3,6 +3,8 @@ package com.embarcados.api.company;
 import com.embarcados.api.features.company.domain.CompanyEntity;
 import com.embarcados.api.features.company.dto.CompanyResponseDTO;
 import com.embarcados.api.features.company.dto.CreateCompanyDTO;
+import com.embarcados.api.features.company.dto.UpdateCompanyDTO;
+import com.embarcados.api.features.company.exceptions.CompanyNotFoundException;
 import com.embarcados.api.features.company.repository.CompanyRepository;
 import com.embarcados.api.features.company.service.imp.CompanyServiceImp;
 import org.junit.jupiter.api.Test;
@@ -14,8 +16,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 
 @ExtendWith(MockitoExtension.class)
@@ -60,5 +64,18 @@ public class CompanyTest {
         assertEquals(2, result.size());
 
         Mockito.verify(companyRepository, Mockito.times(1)).findAll();
+    }
+
+    @Test
+    void shouldThrowCompanyNotFoundExceptionWhenUpdatingMissingCompany() {
+        UpdateCompanyDTO updateCompanyDTO = new UpdateCompanyDTO("Empresa X", "x@email.com", "123");
+
+        Mockito.when(companyRepository.findById("missing-id")).thenReturn(Optional.empty());
+
+        CompanyNotFoundException exception = assertThrows(
+                CompanyNotFoundException.class,
+                () -> companyService.update("missing-id", updateCompanyDTO));
+
+        assertEquals("Empresa não encontrada", exception.getMessage());
     }
 }
