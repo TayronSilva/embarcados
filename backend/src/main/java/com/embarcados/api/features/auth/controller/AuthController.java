@@ -25,7 +25,7 @@ public class AuthController {
 
 
     @Operation(summary = "Auth Empresa/Driver", description = "API de autenticação para empresas e motoristas")
-    @PostMapping("/login")
+    @PostMapping()
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Autenticação com sucesso"),
             @ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos"),
