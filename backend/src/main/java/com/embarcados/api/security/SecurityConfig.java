@@ -38,15 +38,15 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/auth/login").permitAll() // liberando swagger e a documentação
                         .requestMatchers(
                                 "/swagger-ui.html",
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**")
                         .permitAll()
-                        .requestMatchers(
-                                "/api/v1/**")
-                        .permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll() // liberando o login
+                        .requestMatchers(HttpMethod.POST, "/api/v1/companies").permitAll()// liberando a criação de empresas
+                        .requestMatchers("/api/v1/**").authenticated()
                         .anyRequest().authenticated())
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));

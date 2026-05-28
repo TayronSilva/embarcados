@@ -21,12 +21,12 @@ public class DriverServiceImp implements DriverService {
     private final DriverRepository driverRepository;
 
     @Override
-    public DriverResponseDTO create(CreateDriverDTO createDriverDTO) {
+    public DriverResponseDTO create(String companyId, CreateDriverDTO createDriverDTO) {
         DriverEntity driverEntity = new DriverEntity();
         driverEntity.setName(createDriverDTO.getName());
         driverEntity.setEmail(createDriverDTO.getEmail());
         driverEntity.setDocument(createDriverDTO.getDocument());
-        driverEntity.setCompanyId(createDriverDTO.getCompanyId());
+        driverEntity.setCompanyId(companyId);
 
         String passwordHash = passwordEncoder.encode(createDriverDTO.getPassword());
         driverEntity.setPassword(passwordHash);
@@ -45,15 +45,19 @@ public class DriverServiceImp implements DriverService {
     }
 
     @Override
-    public DriverResponseDTO update(String id, UpdateDriverDTO updateDriverDTO) {
+    public DriverResponseDTO update(String id, String companyId, UpdateDriverDTO updateDriverDTO) {
         DriverEntity driver = driverRepository.findById(id)
                 .orElseThrow(DriverNotFoundException::new);
+
+        if (!driver.getCompanyId().equals(companyId)) {
+            throw new RuntimeException("Acesso negado: motorista não pertence à empresa autenticada");
+        }
 
         driver.setName(updateDriverDTO.getName());
         driver.setEmail(updateDriverDTO.getEmail());
         driver.setDocument(updateDriverDTO.getDocument());
         driver.setPassword(passwordEncoder.encode(updateDriverDTO.getPassword()));
-        driver.setCompanyId(updateDriverDTO.getCompanyId());
+        driver.setCompanyId(companyId);
 
         DriverEntity saved = driverRepository.save(driver);
         return toResponse(saved);

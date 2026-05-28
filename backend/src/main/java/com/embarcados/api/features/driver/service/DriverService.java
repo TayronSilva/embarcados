@@ -8,9 +8,9 @@ import java.util.List;
 
 public interface DriverService {
 
-    DriverResponseDTO create(CreateDriverDTO createDriverDTO);
+    DriverResponseDTO create(String companyId, CreateDriverDTO createDriverDTO);
 
     List<DriverResponseDTO> findAll();
 
-    DriverResponseDTO update(String id, UpdateDriverDTO updateDriverDTO);
+    DriverResponseDTO update(String id, String companyId, UpdateDriverDTO updateDriverDTO);
 }

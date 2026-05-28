@@ -2,10 +2,12 @@ package com.embarcados.api.features.company.controller;
 
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.Hidden;
+import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -62,15 +64,17 @@ public class CompanyController {
             @ApiResponse(responseCode = "404", description = "Empresa não encontrada"),
             @ApiResponse(responseCode = "400", description = "Dados inválidos")
     })
-    @PutMapping("{id}")
+    @PutMapping()
     public ResponseEntity<CompanyResponseDTO> update(
-            @PathVariable String id,
-            @RequestBody UpdateCompanyDTO updateCompanyDTO) {
+            @RequestBody UpdateCompanyDTO updateCompanyDTO,
+            @Parameter(hidden = true) Authentication authentication) {
 
-        CompanyResponseDTO updatedCompany = companyService.update(id, updateCompanyDTO);
+        String companyId = authentication.getName();
+        CompanyResponseDTO updatedCompany = companyService.update(companyId, updateCompanyDTO);
 
         return ResponseEntity
                 .ok(updatedCompany);
     }
+
 
 }

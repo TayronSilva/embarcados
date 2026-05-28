@@ -13,5 +13,4 @@ public class CreateDriverDTO {
     private String email;
     private String document;
     private String password;
-    private String companyId;
 }
